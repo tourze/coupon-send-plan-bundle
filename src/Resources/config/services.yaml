@@ -6,3 +6,5 @@ services:
 
   Tourze\CouponSendPlanBundle\Repository\:
     resource: '../../Repository/'
+  Tourze\CouponSendPlanBundle\Service\:
+    resource: '../../Service/'
