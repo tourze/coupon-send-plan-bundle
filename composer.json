@@ -28,7 +28,8 @@
     "tourze/doctrine-user-bundle": "0.0.*",
     "tourze/easy-admin-attribute": "0.1.*",
     "tourze/json-rpc-core": "0.0.*",
-    "tourze/symfony-async-bundle": "0.0.*"
+    "tourze/symfony-async-bundle": "0.0.*",
+    "tourze/coupon-core-bundle": "0.0.*"
   },
   "require-dev": {
     "maglnet/composer-require-checker": "^4",
