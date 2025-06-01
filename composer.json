@@ -21,6 +21,7 @@
     "symfony/routing": "^6.4",
     "symfony/security-core": "^6.4",
     "symfony/yaml": "^6.4 || ^7.1",
+    "tourze/coupon-core-bundle": "0.0.*",
     "tourze/doctrine-indexed-bundle": "0.0.*",
     "tourze/doctrine-ip-bundle": "0.0.*",
     "tourze/doctrine-snowflake-bundle": "0.1.*",
@@ -28,8 +29,7 @@
     "tourze/doctrine-user-bundle": "0.0.*",
     "tourze/easy-admin-attribute": "0.1.*",
     "tourze/json-rpc-core": "0.0.*",
-    "tourze/symfony-async-bundle": "0.0.*",
-    "tourze/coupon-core-bundle": "0.0.*"
+    "tourze/symfony-async-bundle": "0.0.*"
   },
   "require-dev": {
     "maglnet/composer-require-checker": "^4",
