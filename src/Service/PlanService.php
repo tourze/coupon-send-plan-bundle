@@ -6,7 +6,7 @@ use Psr\Log\LoggerInterface;
 use Tourze\CouponCoreBundle\Service\CouponService;
 use Tourze\CouponSendPlanBundle\Entity\SendPlan;
 use Tourze\JsonRPC\Core\Exception\ApiException;
-use Tourze\Symfony\Async\Attribute\Async;
+use Tourze\Symfony\AopAsyncBundle\Attribute\Async;
 
 class PlanService
 {
