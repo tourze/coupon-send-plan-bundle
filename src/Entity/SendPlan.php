@@ -44,8 +44,8 @@ class SendPlan implements \Stringable
     private Collection $users;
 
     #[IndexColumn]
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['comment' => '发送时间'])]
-    private ?\DateTimeInterface $sendTime = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, options: ['comment' => '发送时间'])]
+    private ?\DateTimeImmutable $sendTime = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['comment' => '备注'])]
     private ?string $remark = null;
@@ -69,7 +69,7 @@ class SendPlan implements \Stringable
 
     public function __toString(): string
     {
-        if (!$this->getId()) {
+        if (null === $this->getId()) {
             return '';
         }
 
@@ -165,14 +165,14 @@ class SendPlan implements \Stringable
         return $this;
     }
 
-    public function getSendTime(): ?\DateTimeInterface
+    public function getSendTime(): ?\DateTimeImmutable
     {
         return $this->sendTime;
     }
 
     public function setSendTime(\DateTimeInterface $sendTime): self
     {
-        $this->sendTime = $sendTime;
+        $this->sendTime = $sendTime instanceof \DateTimeImmutable ? $sendTime : \DateTimeImmutable::createFromInterface($sendTime);
 
         return $this;
     }

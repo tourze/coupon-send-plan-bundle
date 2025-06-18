@@ -16,9 +16,10 @@ use Tourze\CouponSendPlanBundle\Service\PlanService;
  *
  * 建议一分钟跑一次，通过这个，我们可以做延迟的优惠券发送逻辑
  */
-#[AsCommand(name: 'coupon:send-plan', description: '自动发送优惠券计划数据')]
+#[AsCommand(name: self::NAME, description: '自动发送优惠券计划数据')]
 class SendCouponPlanCommand extends Command
 {
+    public const NAME = 'coupon:send-plan';
     public function __construct(
         private readonly SendPlanRepository $sendPlanRepository,
         private readonly PlanService $planService,
