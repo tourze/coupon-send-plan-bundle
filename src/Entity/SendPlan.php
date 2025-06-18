@@ -16,27 +16,13 @@ use Tourze\DoctrineSnowflakeBundle\Service\SnowflakeIdGenerator;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineUserBundle\Attribute\CreatedByColumn;
 use Tourze\DoctrineUserBundle\Attribute\UpdatedByColumn;
-use Tourze\EasyAdmin\Attribute\Action\Creatable;
-use Tourze\EasyAdmin\Attribute\Action\Deletable;
-use Tourze\EasyAdmin\Attribute\Action\Editable;
-use Tourze\EasyAdmin\Attribute\Column\BoolColumn;
-use Tourze\EasyAdmin\Attribute\Column\ExportColumn;
-use Tourze\EasyAdmin\Attribute\Column\ListColumn;
-use Tourze\EasyAdmin\Attribute\Field\FormField;
-use Tourze\EasyAdmin\Attribute\Permission\AsPermission;
 
-#[AsPermission(title: '发送计划')]
-#[Deletable]
-#[Editable]
-#[Creatable]
 #[ORM\Entity(repositoryClass: SendPlanRepository::class)]
 #[ORM\Table(name: 'coupon_send_plan', options: ['comment' => '发送计划'])]
 class SendPlan implements \Stringable
 {
     use TimestampableAware;
 
-    #[ExportColumn]
-    #[ListColumn(order: -1, sorter: true)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(SnowflakeIdGenerator::class)]
@@ -52,28 +38,18 @@ class SendPlan implements \Stringable
     private ?string $updatedBy = null;
 
     #[ORM\ManyToMany(targetEntity: Coupon::class, fetch: 'EXTRA_LAZY')]
-    #[ListColumn(title: '发送优惠券')]
-    #[FormField(title: '发送优惠券')]
     private Collection $coupons;
 
     #[ORM\ManyToMany(targetEntity: UserInterface::class, fetch: 'EXTRA_LAZY')]
-    #[ListColumn(title: '接收用户')]
-    #[FormField(title: '接收用户')]
     private Collection $users;
 
     #[IndexColumn]
-    #[ListColumn]
-    #[FormField]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['comment' => '发送时间'])]
     private ?\DateTimeInterface $sendTime = null;
 
-    #[ListColumn]
-    #[FormField(span: 10)]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['comment' => '备注'])]
     private ?string $remark = null;
 
-    #[BoolColumn]
-    #[ListColumn]
     #[ORM\Column(type: Types::BOOLEAN, nullable: true, options: ['comment' => '已完成'])]
     private bool $finished = false;
 
