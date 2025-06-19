@@ -2,7 +2,7 @@
 
 namespace Tourze\CouponSendPlanBundle\Command;
 
-use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -32,7 +32,7 @@ class SendCouponPlanCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $plans = $this->sendPlanRepository->findBy([
-            'sendTime' => Carbon::now()->format('Y-m-d H:i:s'),
+            'sendTime' => CarbonImmutable::now()->format('Y-m-d H:i:s'),
         ]);
         if (empty($plans)) {
             return Command::FAILURE;
