@@ -12,7 +12,7 @@ use Tourze\CouponSendPlanBundle\Repository\SendPlanRepository;
 use Tourze\DoctrineIndexedBundle\Attribute\IndexColumn;
 use Tourze\DoctrineIpBundle\Attribute\CreateIpColumn;
 use Tourze\DoctrineIpBundle\Attribute\UpdateIpColumn;
-use Tourze\DoctrineSnowflakeBundle\Service\SnowflakeIdGenerator;
+use Tourze\DoctrineSnowflakeBundle\Traits\SnowflakeKeyAware;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineUserBundle\Traits\BlameableAware;
 
@@ -22,12 +22,7 @@ class SendPlan implements \Stringable
 {
     use TimestampableAware;
     use BlameableAware;
-
-    #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(SnowflakeIdGenerator::class)]
-    #[ORM\Column(type: Types::BIGINT, nullable: false, options: ['comment' => 'ID'])]
-    private ?string $id = null;
+    use SnowflakeKeyAware;
 
     #[ORM\ManyToMany(targetEntity: Coupon::class, fetch: 'EXTRA_LAZY')]
     private Collection $coupons;
@@ -62,15 +57,10 @@ class SendPlan implements \Stringable
     public function __toString(): string
     {
         if (null === $this->getId()) {
-            return '';
+            return '#';
         }
 
         return "#{$this->getId()}";
-    }
-
-    public function getId(): ?string
-    {
-        return $this->id;
     }
 
     public function getRemark(): ?string

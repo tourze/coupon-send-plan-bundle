@@ -8,3 +8,5 @@ services:
     resource: '../../Repository/'
   Tourze\CouponSendPlanBundle\Service\:
     resource: '../../Service/'
+  Tourze\CouponSendPlanBundle\Command\:
+    resource: '../../Command/'
