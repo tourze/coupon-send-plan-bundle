@@ -8,6 +8,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Tourze\CouponSendPlanBundle\Entity\SendPlan;
 use Tourze\CouponSendPlanBundle\Repository\SendPlanRepository;
 use Tourze\CouponSendPlanBundle\Service\PlanService;
 
@@ -20,6 +21,7 @@ use Tourze\CouponSendPlanBundle\Service\PlanService;
 class SendCouponPlanCommand extends Command
 {
     public const NAME = 'coupon:send-plan';
+
     public function __construct(
         private readonly SendPlanRepository $sendPlanRepository,
         private readonly PlanService $planService,
@@ -29,16 +31,17 @@ class SendCouponPlanCommand extends Command
         parent::__construct($name);
     }
 
-    public function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $plans = $this->sendPlanRepository->findBy([
-            'sendTime' => CarbonImmutable::now()->format('Y-m-d H:i:s'),
+            'sendTime' => CarbonImmutable::now(),
         ]);
-        if (empty($plans)) {
+        if ([] === $plans) {
             return Command::FAILURE;
         }
 
         foreach ($plans as $plan) {
+            assert($plan instanceof SendPlan);
             // 因为数量可能很大，所以这里不执行具体发送逻辑
             $this->planService->send($plan);
             $plan->setFinished(true);

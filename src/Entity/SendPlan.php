@@ -7,11 +7,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 use Tourze\CouponCoreBundle\Entity\Coupon;
 use Tourze\CouponSendPlanBundle\Repository\SendPlanRepository;
 use Tourze\DoctrineIndexedBundle\Attribute\IndexColumn;
-use Tourze\DoctrineIpBundle\Attribute\CreateIpColumn;
-use Tourze\DoctrineIpBundle\Attribute\UpdateIpColumn;
+use Tourze\DoctrineIpBundle\Traits\CreatedFromIpAware;
 use Tourze\DoctrineSnowflakeBundle\Traits\SnowflakeKeyAware;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\DoctrineUserBundle\Traits\BlameableAware;
@@ -23,30 +23,32 @@ class SendPlan implements \Stringable
     use TimestampableAware;
     use BlameableAware;
     use SnowflakeKeyAware;
+    use CreatedFromIpAware;
 
-    #[ORM\ManyToMany(targetEntity: Coupon::class, fetch: 'EXTRA_LAZY')]
+    /**
+     * @var Collection<int, Coupon>
+     */
+    #[ORM\ManyToMany(targetEntity: Coupon::class, fetch: 'EXTRA_LAZY', cascade: ['persist'])]
     private Collection $coupons;
 
-    #[ORM\ManyToMany(targetEntity: UserInterface::class, fetch: 'EXTRA_LAZY')]
+    /**
+     * @var Collection<int, UserInterface>
+     */
+    #[ORM\ManyToMany(targetEntity: UserInterface::class, fetch: 'EXTRA_LAZY', cascade: ['persist'])]
     private Collection $users;
 
+    #[Assert\NotNull(message: 'Send time is required')]
     #[IndexColumn]
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, options: ['comment' => '发送时间'])]
     private ?\DateTimeImmutable $sendTime = null;
 
+    #[Assert\Length(max: 255, maxMessage: 'Remark cannot be longer than {{ limit }} characters')]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['comment' => '备注'])]
     private ?string $remark = null;
 
+    #[Assert\Type(type: 'bool', message: 'Finished must be a boolean value')]
     #[ORM\Column(type: Types::BOOLEAN, nullable: true, options: ['comment' => '已完成'])]
     private bool $finished = false;
-
-    #[CreateIpColumn]
-    #[ORM\Column(length: 128, nullable: true, options: ['comment' => '创建时IP'])]
-    private ?string $createdFromIp = null;
-
-    #[UpdateIpColumn]
-    #[ORM\Column(length: 128, nullable: true, options: ['comment' => '更新时IP'])]
-    private ?string $updatedFromIp = null;
 
     public function __construct()
     {
@@ -68,11 +70,9 @@ class SendPlan implements \Stringable
         return $this->remark;
     }
 
-    public function setRemark(?string $remark): self
+    public function setRemark(?string $remark): void
     {
         $this->remark = $remark;
-
-        return $this;
     }
 
     /**
@@ -83,20 +83,16 @@ class SendPlan implements \Stringable
         return $this->coupons;
     }
 
-    public function addCoupon(Coupon $coupon): self
+    public function addCoupon(Coupon $coupon): void
     {
         if (!$this->coupons->contains($coupon)) {
             $this->coupons->add($coupon);
         }
-
-        return $this;
     }
 
-    public function removeCoupon(Coupon $coupon): self
+    public function removeCoupon(Coupon $coupon): void
     {
         $this->coupons->removeElement($coupon);
-
-        return $this;
     }
 
     /**
@@ -107,20 +103,16 @@ class SendPlan implements \Stringable
         return $this->users;
     }
 
-    public function addUser(UserInterface $user): self
+    public function addUser(UserInterface $user): void
     {
         if (!$this->users->contains($user)) {
             $this->users->add($user);
         }
-
-        return $this;
     }
 
-    public function removeUser(UserInterface $user): self
+    public function removeUser(UserInterface $user): void
     {
         $this->users->removeElement($user);
-
-        return $this;
     }
 
     public function getSendTime(): ?\DateTimeImmutable
@@ -128,11 +120,9 @@ class SendPlan implements \Stringable
         return $this->sendTime;
     }
 
-    public function setSendTime(\DateTimeInterface $sendTime): self
+    public function setSendTime(\DateTimeInterface $sendTime): void
     {
         $this->sendTime = $sendTime instanceof \DateTimeImmutable ? $sendTime : \DateTimeImmutable::createFromInterface($sendTime);
-
-        return $this;
     }
 
     public function isFinished(): ?bool
@@ -140,34 +130,8 @@ class SendPlan implements \Stringable
         return $this->finished;
     }
 
-    public function setFinished(bool $finished): self
+    public function setFinished(bool $finished): void
     {
         $this->finished = $finished;
-
-        return $this;
-    }
-
-    public function setCreatedFromIp(?string $createdFromIp): self
-    {
-        $this->createdFromIp = $createdFromIp;
-
-        return $this;
-    }
-
-    public function getCreatedFromIp(): ?string
-    {
-        return $this->createdFromIp;
-    }
-
-    public function setUpdatedFromIp(?string $updatedFromIp): self
-    {
-        $this->updatedFromIp = $updatedFromIp;
-
-        return $this;
-    }
-
-    public function getUpdatedFromIp(): ?string
-    {
-        return $this->updatedFromIp;
     }
 }

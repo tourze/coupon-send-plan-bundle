@@ -10,3 +10,5 @@ services:
     resource: '../../Service/'
   Tourze\CouponSendPlanBundle\Command\:
     resource: '../../Command/'
+  Tourze\CouponSendPlanBundle\Controller\:
+    resource: '../../Controller/'
