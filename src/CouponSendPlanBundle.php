@@ -13,6 +13,7 @@ use Tourze\DoctrineIpBundle\DoctrineIpBundle;
 use Tourze\DoctrineSnowflakeBundle\DoctrineSnowflakeBundle;
 use Tourze\DoctrineTimestampBundle\DoctrineTimestampBundle;
 use Tourze\DoctrineUserBundle\DoctrineUserBundle;
+use Tourze\EasyAdminMenuBundle\EasyAdminMenuBundle;
 use Tourze\Symfony\AopAsyncBundle\AopAsyncBundle;
 
 class CouponSendPlanBundle extends Bundle implements BundleDependencyInterface
@@ -30,6 +31,7 @@ class CouponSendPlanBundle extends Bundle implements BundleDependencyInterface
             DoctrineTimestampBundle::class => ['all' => true],
             DoctrineUserBundle::class => ['all' => true],
             AopAsyncBundle::class => ['all' => true],
+            EasyAdminMenuBundle::class => ['all' => true],
         ];
     }
 }
