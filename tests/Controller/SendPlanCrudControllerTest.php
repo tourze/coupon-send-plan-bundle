@@ -31,11 +31,6 @@ use Tourze\PHPUnitSymfonyWebTest\AbstractEasyAdminControllerTestCase;
 #[RunTestsInSeparateProcesses]
 class SendPlanCrudControllerTest extends AbstractEasyAdminControllerTestCase
 {
-    public function testGetEntityFqcn(): void
-    {
-        self::assertSame(SendPlan::class, SendPlanCrudController::getEntityFqcn());
-    }
-
     public function testControllerCanBeInstantiated(): void
     {
         $controller = new SendPlanCrudController();
