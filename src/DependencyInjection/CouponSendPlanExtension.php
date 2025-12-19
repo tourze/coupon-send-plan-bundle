@@ -4,7 +4,7 @@ namespace Tourze\CouponSendPlanBundle\DependencyInjection;
 
 use Tourze\SymfonyDependencyServiceLoader\AutoExtension;
 
-class CouponSendPlanExtension extends AutoExtension
+final class CouponSendPlanExtension extends AutoExtension
 {
     protected function getConfigDir(): string
     {
